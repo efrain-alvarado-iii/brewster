@@ -102,14 +102,18 @@ contains
        ! add up the taus to get extinction
        do ilayer = 1, nlayers
 
-          tau_cloud(ilayer,:) = patch(ipatch)%atm(ilayer)%opd_ext
+          if (clphot) then
+             tau_cloud(ilayer,:) = patch(ipatch)%atm(ilayer)%opd_ext
+          end if
 
-          tau_others(ilayer,:) = patch(ipatch)%atm(ilayer)%opd_lines + &
+          if (othphot) then
+             tau_others(ilayer,:) = patch(ipatch)%atm(ilayer)%opd_lines + &
                patch(ipatch)%atm(ilayer)%opd_CIA + &
                patch(ipatch)%atm(ilayer)%opd_rayl + &
                patch(ipatch)%atm(ilayer)%opd_hmbff
-          
-          
+          end if
+
+
           patch(ipatch)%atm(ilayer)%opd_ext = &
                patch(ipatch)%atm(ilayer)%opd_ext + &
                patch(ipatch)%atm(ilayer)%opd_lines + &
@@ -164,9 +168,9 @@ contains
 
           ! get the pressure level where tau_cloud = taup_cl
           ! set reference tau for cloud taup_cl
-          taup_cl = 1.0
+          taup_cl = 0.6667
           ! set reference tau for others taup_oth
-          taup_oth = 1.0
+          taup_oth = 0.6667
 
 
           cldone = .false.
